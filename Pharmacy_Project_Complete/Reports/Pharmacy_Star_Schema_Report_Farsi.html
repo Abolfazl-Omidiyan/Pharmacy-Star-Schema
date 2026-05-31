@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<!-- saved from url=(0066)file:///C:/Users/HP/Desktop/Pharmacy_Star_Schema_Report_Farsi.html -->
+<html lang="fa" dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>گزارش پروژه دوم - مدل Star Schema داروخانه</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --primary: #1a5490;
+    --secondary: #2d7ab8;
+    --accent: #f39c12;
+    --danger: #e74c3c;
+    --success: #27ae60;
+    --light: #ecf0f1;
+    --dark: #2c3e50;
+    --text: #34495e;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Vazirmatn', sans-serif;
+    background: #f5f7fa;
+    color: var(--text);
+    line-height: 1.8;
+    direction: rtl;
+  }
+
+  .header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    padding: 60px 40px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+
+  .header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+
+  .header p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+
+  .section {
+    background: white;
+    padding: 40px;
+    margin: 30px 0;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    border-right: 5px solid var(--primary);
+  }
+
+  .section h2 {
+    color: var(--primary);
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--accent);
+  }
+
+  .section h3 {
+    color: var(--secondary);
+    font-size: 1.3rem;
+    margin: 25px 0 15px 0;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 25px 0;
+  }
+
+  .stat-card {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    padding: 25px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  .stat-card .value {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 10px 0;
+  }
+
+  .stat-card .label {
+    font-size: 0.95rem;
+    opacity: 0.9;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.95rem;
+  }
+
+  table th {
+    background: var(--primary);
+    color: white;
+    padding: 15px;
+    text-align: right;
+    font-weight: 600;
+  }
+
+  table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ecf0f1;
+  }
+
+  table tr:hover {
+    background: #f9f9f9;
+  }
+
+  .highlight {
+    background: var(--accent);
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+  }
+
+  .box-info {
+    background: #e3f2fd;
+    border-right: 4px solid var(--primary);
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 5px;
+  }
+
+  .box-success {
+    background: #e8f5e9;
+    border-right: 4px solid var(--success);
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 5px;
+  }
+
+  .box-warning {
+    background: #fff3e0;
+    border-right: 4px solid var(--accent);
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 5px;
+  }
+
+  ul, ol {
+    margin: 15px 0 15px 30px;
+    line-height: 1.9;
+  }
+
+  li {
+    margin: 8px 0;
+  }
+
+  .schema-diagram {
+    background: white;
+    border: 2px dashed var(--primary);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+    font-family: monospace;
+    overflow-x: auto;
+  }
+
+  code {
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    color: var(--danger);
+  }
+
+  .footer {
+    background: var(--dark);
+    color: white;
+    text-align: center;
+    padding: 30px;
+    margin-top: 60px;
+  }
+
+  .author-info {
+    background: var(--light);
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    border-right: 4px solid var(--accent);
+  }
+
+  .pivot-example {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 15px 0;
+    border: 1px solid #ddd;
+  }
+
+  .metric {
+    display: inline-block;
+    background: var(--light);
+    padding: 10px 15px;
+    margin: 5px;
+    border-radius: 5px;
+    border-right: 3px solid var(--primary);
+  }
+
+  @media print {
+    body {
+      background: white;
+    }
+    .section {
+      page-break-inside: avoid;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📊 پروژه دوم: مدل ستاره‌ای داروخانه زنجیره‌ای</h1>
+  <p>طراحی و پیاده‌سازی Star Schema برای تجزیه‌وتحلیل فروش داروخانه</p>
+</div>
+
+<div class="container">
+
+<!-- بخش ۱: معرفی -->
+<div class="section">
+  <h2>🎯 معرفی پروژه</h2>
+  
+  <p>
+    این پروژه بر طراحی یک <strong>مدل داده‌های چندبعدی (Multidimensional Data Model)</strong> برای یک <strong>داروخانه زنجیره‌ای</strong> متمرکز است.
+    هدف تهیه‌ی بستری برای تجزیه‌وتحلیل فروش، شناسایی الگوهای مشتری، و تصمیم‌گیری مدیریتی است.
+  </p>
+
+  <div class="box-info">
+    <strong>🔍 اهداف پروژه:</strong>
+    <ul>
+      <li>طراحی مدل Star Schema برای ذخیره‌سازی تراکنش‌های فروش</li>
+      <li>ایجاد Pivot Tables برای تحلیل‌های متعدد</li>
+      <li>تهیه‌ی گزارش‌های داینامیک و تجزیه‌وتحلیلی</li>
+      <li>استخراج بینش‌های تجاری از داده‌های تراکنش‌ها</li>
+    </ul>
+  </div>
+</div>
+
+<!-- بخش ۲: معماری مدل -->
+<div class="section">
+  <h2>🏗️ معماری مدل Star Schema</h2>
+  
+  <p>
+    مدل ستاره‌ای (Star Schema) یک معماری داده‌ای است که در سیستم‌های تجزیه‌وتحلیل (OLAP) استفاده می‌شود.
+    این مدل شامل یک جدول واقعیت مرکزی (Fact Table) و چندین جداول ابعاد (Dimension Tables) است.
+  </p>
+
+  <div class="schema-diagram">
+    <img src="./گزارش پروژه دوم - مدل Star Schema داروخانه_files/star_schema_diagram.jpg" alt="Star Schema Diagram" style="width: 100%; max-width: 900px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); margin: 20px 0;">
+  </div>
+
+  <h3>توضیح اجزاء مدل:</h3>
+
+  <table>
+    <tbody><tr>
+      <th>نام جدول</th>
+      <th>نوع</th>
+      <th>تعداد رکورد</th>
+      <th>توضیح</th>
+    </tr>
+    <tr>
+      <td><code>FACT_SALES</code></td>
+      <td>Fact Table</td>
+      <td>5,000</td>
+      <td>تمام تراکنش‌های فروش داروخانه</td>
+    </tr>
+    <tr>
+      <td><code>DIM_TIME</code></td>
+      <td>Dimension</td>
+      <td>366</td>
+      <td>تمام روزهای سال 2024</td>
+    </tr>
+    <tr>
+      <td><code>DIM_CUSTOMER</code></td>
+      <td>Dimension</td>
+      <td>4,347</td>
+      <td>مشتریان با اطلاعات جمعیت‌شناسی</td>
+    </tr>
+    <tr>
+      <td><code>DIM_DRUG</code></td>
+      <td>Dimension</td>
+      <td>20</td>
+      <td>داروهای دسترسی‌پذیر (20 نوع)</td>
+    </tr>
+    <tr>
+      <td><code>DIM_BRANCH</code></td>
+      <td>Dimension</td>
+      <td>10</td>
+      <td>شعبه‌های داروخانه</td>
+    </tr>
+  </tbody></table>
+
+  <div class="box-success">
+    <strong>✓ مزایای مدل Star Schema:</strong>
+    <ul>
+      <li>استعلام‌های سریع‌تر به دلیل کاهش joinها</li>
+      <li>درک ساده‌تر ساختار داده</li>
+      <li>بهینه‌سازی برای تجزیه‌وتحلیل (OLAP)</li>
+      <li>توسعه‌پذیری بالا برای افزودن ابعاد جدید</li>
+    </ul>
+  </div>
+</div>
+
+<!-- بخش ۳: توضیح Dimensions -->
+<div class="section">
+  <h2>📋 جداول ابعاد (Dimension Tables)</h2>
+
+  <h3>۱) جدول زمان (DIM_TIME)</h3>
+  <div class="box-info">
+    <p><strong>کلیدی ترین بعد برای تجزیه‌وتحلیل رویه‌ای.</strong></p>
+    <p><strong>ستون‌ها:</strong> Date, Day, Month, Quarter, Year, DayOfWeek, WeekOfYear</p>
+    <p><strong>کاربرد:</strong> تحلیل فروش بر حسب زمان (روزانه، ماهانه، فصلی)</p>
+  </div>
+
+  <h3>۲) جدول مشتری (DIM_CUSTOMER)</h3>
+  <div class="box-info">
+    <p><strong>اطلاعات دموگرافی مشتریان.</strong></p>
+    <p><strong>ستون‌ها:</strong> CustomerID, Gender, AgeGroup</p>
+    <p><strong>گروه‌های سنی:</strong> &lt;18, 18-35, 36-50, 51-65, &gt;65</p>
+    <p><strong>کاربرد:</strong> تقسیم‌بندی مشتریان و تحلیل رفتار خریدی</p>
+  </div>
+
+  <h3>۳) جدول دارو (DIM_DRUG)</h3>
+  <div class="box-info">
+    <p><strong>کاتالوگ داروهای موجود.</strong></p>
+    <p><strong>ستون‌ها:</strong> DrugCode, DrugName, Category</p>
+    <p><strong>تعداد دسته‌بندی:</strong> 13 دسته‌ی دارویی مختلف</p>
+    <p><strong>کاربرد:</strong> تجزیه‌وتحلیل فروش به تفکیک داروها و دسته‌ها</p>
+  </div>
+
+  <h3>۴) جدول شعبه (DIM_BRANCH)</h3>
+  <div class="box-info">
+    <p><strong>اطلاعات شعبه‌های داروخانه.</strong></p>
+    <p><strong>ستون‌ها:</strong> BranchCode, BranchName</p>
+    <p><strong>تعداد شعبه:</strong> 10 شعبه (B001 تا B010)</p>
+    <p><strong>کاربرد:</strong> تقارن فروش بین شعبه‌ها و کارایی هر واحد</p>
+  </div>
+</div>
+
+<!-- بخش ۴: جدول واقعیت -->
+<div class="section">
+  <h2>📊 جدول واقعیت (FACT_SALES)</h2>
+
+  <p>
+    جدول واقعیت حاوی تمام تراکنش‌های فروش است. هر سطر نشان‌دهنده یک خرید است.
+  </p>
+
+  <h3>ستون‌های اندازه‌ای (Measures):</h3>
+  <table>
+    <tbody><tr>
+      <th>ستون</th>
+      <th>نوع داده</th>
+      <th>توضیح</th>
+    </tr>
+    <tr>
+      <td><code>Quantity</code></td>
+      <td>Integer</td>
+      <td>تعداد واحد دارو فروخته‌شده (1-4)</td>
+    </tr>
+    <tr>
+      <td><code>UnitPrice</code></td>
+      <td>Decimal</td>
+      <td>قیمت هر واحد دارو (تومان)</td>
+    </tr>
+    <tr>
+      <td><code>TotalAmount</code></td>
+      <td>Decimal</td>
+      <td>مبلغ کل تراکنش (Quantity × UnitPrice)</td>
+    </tr>
+    <tr>
+      <td><code>PaymentMethod</code></td>
+      <td>String</td>
+      <td>روش پرداخت (Cash, Card, Insurance, Check)</td>
+    </tr>
+  </tbody></table>
+
+  <h3>آمار کلی جدول واقعیت:</h3>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="label">کل تراکنش‌ها</div>
+      <div class="value">5,000</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">کل درآمد</div>
+      <div class="value">1,674 میلیارد</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">میانگین تراکنش</div>
+      <div class="value">334,820 تومان</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">کل واحدهای فروخته‌شده</div>
+      <div class="value">11,970</div>
+    </div>
+  </div>
+</div>
+
+<!-- بخش ۵: Pivot Tables -->
+<div class="section">
+  <h2>🔄 جداول Pivot (Pivot Tables)</h2>
+
+  <p>
+    Pivot Tables ابزار قدرتمندی برای تجزیه‌وتحلیل داده‌ها بر حسب ابعاد مختلف هستند.
+    در پروژه‌ی ما، 7 Pivot Table مختلف ایجاد شده‌اند:
+  </p>
+
+  <h3>1️⃣ روند درآمد ماهانه</h3>
+  <div class="pivot-example">
+    <p><strong>محاسبه:</strong> SUM(TotalAmount) بر حسب ماه</p>
+    <p><strong>استفاده:</strong> شناسایی فصول پرفروش و کم‌فروش</p>
+    <p><strong>نتیجه:</strong> اختلاف 15 میلیون تومان بین پرفروش‌ترین و کم‌فروش‌ترین ماه</p>
+  </div>
+
+  <h3>2️⃣ شعبه در برابر دسته‌بندی دارو</h3>
+  <div class="pivot-example">
+    <p><strong>محاسبه:</strong> SUM(TotalAmount) × ShopBranch × DrugCategory</p>
+    <p><strong>استفاده:</strong> تقسیم فروش هر شعبه به تفکیک دسته‌بندی</p>
+    <p><strong>نتیجه:</strong> شعبه 5 برتر است (186 میلیارد)، شعبه 10 کمترین فروش (148 میلیارد)</p>
+  </div>
+
+  <h3>3️⃣ گروه سنی در برابر جنسیت</h3>
+  <div class="pivot-example">
+    <p><strong>محاسبه:</strong> SUM(TotalAmount) × AgeGroup × Gender</p>
+    <p><strong>استفاده:</strong> درک الگوهای خریدی به تفکیک جمعیت‌شناسی</p>
+    <p><strong>نتیجه:</strong> گروه 36-50 سال بیشترین خریداری (345 میلیارد)</p>
+  </div>
+
+  <h3>4️⃣ روش پرداخت در شعبه‌ها</h3>
+  <div class="pivot-example">
+    <p><strong>محاسبه:</strong> COUNT(TransactionID) × PaymentMethod × Branch</p>
+    <p><strong>استفاده:</strong> بررسی تفضیل روش‌های پرداخت در هر شعبه</p>
+    <p><strong>نتیجه:</strong> نقد (40%)، کارت (35%)، بیمه (20%)، چک (5%)</p>
+  </div>
+
+  <h3>5️⃣ تحلیل روز هفته</h3>
+  <div class="pivot-example">
+    <p><strong>محاسبه:</strong> SUM(TotalAmount) × DayOfWeek</p>
+    <p><strong>استفاده:</strong> شناسایی روزهای پرفروش و کم‌فروش</p>
+    <p><strong>نتیجه:</strong> سه‌شنبه: بیشترین درآمد (243 میلیارد)</p>
+  </div>
+
+  <h3>6️⃣ ۱۰ دارو برتر</h3>
+  <div class="pivot-example">
+    <p><strong>محاسبه:</strong> SUM(TotalAmount) بر حسب دارو</p>
+    <p><strong>استفاده:</strong> شناسایی داروهای پرفروش</p>
+    <p><strong>نتیجه:</strong> Antibiotic (D0005) با 182 میلیارد برتر است</p>
+  </div>
+
+  <h3>7️⃣ توزیع سنی مشتریان</h3>
+  <div class="pivot-example">
+    <p><strong>محاسبه:</strong> SUM(TotalAmount) × AgeGroup</p>
+    <p><strong>استفاده:</strong> درک ترکیب مشتریان بر حسب سن</p>
+    <p><strong>نتیجه:</strong> گروه 36-50 بیشترین درآمد (344 میلیارد)</p>
+  </div>
+</div>
+
+<!-- بخش ۶: بینش‌های تجاری -->
+<div class="section">
+  <h2>💡 بینش‌های تجاری و توصیه‌ها</h2>
+
+  <h3>📈 یافته‌های کلیدی:</h3>
+
+  <div class="box-warning">
+    <strong>1. توزیع شعبه نامتوازن:</strong>
+    <ul>
+      <li>شعبه 5 نزدیک به 26% درآمد کل را تولید می‌کند</li>
+      <li>شعبه 10 تنها 8.8% درآمد کل را تولید می‌کند</li>
+      <li>توصیه: بررسی کارایی و مدیریت شعبه 10</li>
+    </ul>
+  </div>
+
+  <div class="box-warning">
+    <strong>2. الگو‌های خریدی مشتریان:</strong>
+    <ul>
+      <li>گروه سنی 36-50 بیشترین خریدار است</li>
+      <li>توزیع جنسیتی تقریباً برابر (50%-50%)</li>
+      <li>توصیه: طراحی برنامه‌های بازاریابی برای گروه 36-50</li>
+    </ul>
+  </div>
+
+  <div class="box-warning">
+    <strong>3. ترجیح روش پرداخت:</strong>
+    <ul>
+      <li>نقد 40% تراکنش‌ها (647 میلیارد)</li>
+      <li>کارت 35% تراکنش‌ها (593 میلیارد)</li>
+      <li>بیمه 20% تراکنش‌ها (349 میلیارد)</li>
+      <li>توصیه: تقویت سیستم پرداخت الکترونیک</li>
+    </ul>
+  </div>
+
+  <div class="box-warning">
+    <strong>4. داروهای پرفروش:</strong>
+    <ul>
+      <li>Antibiotics بیشترین درآمد (239 میلیارد)</li>
+      <li>Top 3 drugs: D0005 (182M)، D0013 (129M)، D0010 (126M)</li>
+      <li>توصیه: تأمین موجودی کافی برای داروهای پرفروش</li>
+    </ul>
+  </div>
+
+  <h3>🎯 توصیه‌های اجرایی:</h3>
+
+  <table>
+    <tbody><tr>
+      <th>حوزه</th>
+      <th>مشکل</th>
+      <th>توصیه</th>
+    </tr>
+    <tr>
+      <td>مدیریت شعبه</td>
+      <td>عملکرد نابرابر شعبه‌ها</td>
+      <td>بررسی ساختار منابع و ارزیابی مدیریت هر شعبه</td>
+    </tr>
+    <tr>
+      <td>مدیریت موجودی</td>
+      <td>تقاضای متفاوت برای داروها</td>
+      <td>سیستم مدیریت موجودی پیش‌بین برای Top 10 drugs</td>
+    </tr>
+    <tr>
+      <td>بازاریابی</td>
+      <td>گروه سنی خاص پرفروش</td>
+      <td>طراحی کمپین هدفمند برای گروه 36-50</td>
+    </tr>
+    <tr>
+      <td>سیستم پرداخت</td>
+      <td>تکیه بر پرداخت نقد</td>
+      <td>تشویق پرداخت کارت و دیجیتال</td>
+    </tr>
+  </tbody></table>
+</div>
+
+<!-- بخش ۷: فایل‌های خروجی -->
+<div class="section">
+  <h2>📁 فایل‌های پروژه</h2>
+
+  <h3>فایل‌های ایجاد‌شده:</h3>
+
+  <ul>
+    <li><code>dim_time.csv</code> - جدول بعد زمان (366 رکورد)</li>
+    <li><code>dim_customer.csv</code> - جدول بعد مشتری (4,347 رکورد)</li>
+    <li><code>dim_drug.csv</code> - جدول بعد دارو (20 رکورد)</li>
+    <li><code>dim_branch.csv</code> - جدول بعد شعبه (10 رکورد)</li>
+    <li><code>fact_sales.csv</code> - جدول واقعیت فروش (5,000 رکورد) [ایجاد شده]</li>
+    <li><code>pharmacy_analysis_pivots.xlsx</code> - 7 Pivot Table در Excel</li>
+  </ul>
+
+  <div class="box-success">
+    <strong>✓ ویژگی‌های داده:</strong>
+    <ul>
+      <li>داده‌های واقعی‌گرایانه و منطقی</li>
+      <li>تاریخ‌ها برای سال 2024 کامل</li>
+      <li>قیمت‌های دارویی متناسب با بازار ایران</li>
+      <li>توزیع متنوع گروه‌های مشتری</li>
+      <li>روش‌های پرداخت متنوع</li>
+    </ul>
+  </div>
+</div>
+
+<!-- بخش ۸: نتیجه‌گیری -->
+<div class="section">
+  <h2>🎓 نتیجه‌گیری</h2>
+
+  <p>
+    این پروژه نشان می‌دهد که چگونه مدل Star Schema می‌تواند برای تجزیه‌وتحلیل فروش یک سازمان تجاری استفاده شود.
+    با طراحی ساختار داده‌ای مناسب و ایجاد Pivot Tables متعدد، سازمان‌ها می‌توانند:
+  </p>
+
+  <ul>
+    <li>💰 درک عمیق‌تری از منابع درآمد داشته باشند</li>
+    <li>📊 رویه‌های فروش را به تفکیک ابعاد مختلف تحلیل کنند</li>
+    <li>👥 رفتار مشتریان را بر حسب جمعیت‌شناسی بررسی کنند</li>
+    <li>📈 تصمیمات مدیریتی بر اساس داده‌های قابل‌اعتماد بگیرند</li>
+    <li>🎯 کمپین‌های بازاریابی هدفمند‌تری اجرا کنند</li>
+  </ul>
+
+  <div class="highlight">
+    <strong>🔑 نتیجه‌ی نهایی:</strong>
+    مدل‌های ستاره‌ای ابزار قدرتمندی برای تجزیه‌وتحلیل و گزارش‌دهی در سیستم‌های تجاری هستند.
+    آن‌ها ساختار داده‌ای واضح، استعلام‌های سریع، و Pivot Tables لچکدار فراهم می‌کنند.
+  </div>
+</div>
+
+<!-- بخش ۹: اطلاعات نویسنده -->
+<div class="author-info">
+  <h3>📝 اطلاعات پروژه</h3>
+  <p><strong>نویسنده:</strong> دانشجو/تحلیل‌گر داده</p>
+  <p><strong>موضوع:</strong> طراحی مدل Star Schema برای داروخانه</p>
+  <p><strong>تاریخ:</strong> سال تحصیلی 1405-1404</p>
+  <p><strong>ابزارهای استفاده‌شده:</strong> Python (Pandas)، Excel (Pivot Tables)، Star Schema</p>
+</div>
+
+</div>
+
+<div class="footer">
+  <div style="margin-bottom: 20px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+    <p style="margin: 8px 0; font-size: 1rem;">
+       ابوالفضل امیدیان
+    </p>
+    <p style="margin: 8px 0; font-size: 0.95rem;">
+      دانشجوی مقطع کارشناسی ارشد فناوری اطلاعات - معماری سازمانی
+    </p>
+    <p style="margin: 12px 0; font-size: 0.95rem;">
+      <a href="https://ir.linkedin.com/in/abolfazl-omidiyan" target="_blank" style="color: #4f8ef7; text-decoration: none; font-weight: 600;">
+        🔗 LinkedIn Profile - Abolfazl Omidiyan
+      </a>
+    </p>
+  </div>
+  <p>© پروژه دوم - مدل Star Schema داروخانه زنجیره‌ای</p>
+  <p>تمام حقوق محفوظ است | 1403</p>
+</div>
+
+
+
+</body></html>

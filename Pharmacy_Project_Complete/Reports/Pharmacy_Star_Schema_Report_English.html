@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Star Schema Report - Pharmaceutical Chain Warehouse</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --primary: #1a5490;
+    --secondary: #2d7ab8;
+    --accent: #f39c12;
+    --danger: #e74c3c;
+    --success: #27ae60;
+    --light: #ecf0f1;
+    --dark: #2c3e50;
+    --text: #34495e;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #f5f7fa;
+    color: var(--text);
+    line-height: 1.8;
+  }
+
+  .header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    padding: 60px 40px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+
+  .header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+
+  .header p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+
+  .section {
+    background: white;
+    padding: 40px;
+    margin: 30px 0;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    border-right: 5px solid var(--primary);
+  }
+
+  .section h2 {
+    color: var(--primary);
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--accent);
+  }
+
+  .section h3 {
+    color: var(--secondary);
+    font-size: 1.3rem;
+    margin: 25px 0 15px 0;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 25px 0;
+  }
+
+  .stat-card {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    padding: 25px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  .stat-card .value {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 10px 0;
+  }
+
+  .stat-card .label {
+    font-size: 0.95rem;
+    opacity: 0.9;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.95rem;
+  }
+
+  table th {
+    background: var(--primary);
+    color: white;
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+  }
+
+  table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ecf0f1;
+  }
+
+  table tr:hover {
+    background: #f9f9f9;
+  }
+
+  .highlight {
+    background: var(--accent);
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+  }
+
+  .box-info {
+    background: #e3f2fd;
+    border-left: 4px solid var(--primary);
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 5px;
+  }
+
+  .box-success {
+    background: #e8f5e9;
+    border-left: 4px solid var(--success);
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 5px;
+  }
+
+  .schema-diagram {
+    background: white;
+    border: 2px solid var(--primary);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .schema-diagram img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+  }
+
+  .footer {
+    background: var(--dark);
+    color: white;
+    text-align: center;
+    padding: 30px;
+    margin-top: 60px;
+  }
+
+  .footer a {
+    color: #f39c12;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .footer a:hover {
+    text-decoration: underline;
+  }
+
+  ul, ol {
+    margin: 15px 0 15px 30px;
+    line-height: 1.9;
+  }
+
+  li {
+    margin: 8px 0;
+  }
+
+  strong {
+    color: var(--dark);
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📊 Star Schema Report</h1>
+  <h2>Pharmaceutical Chain Sales Data Warehouse</h2>
+  <p>Comprehensive Analysis and Dimensional Modeling</p>
+</div>
+
+<div class="container">
+
+<!-- Section: Introduction -->
+<div class="section">
+  <h2>🎯 Project Overview</h2>
+  
+  <p>
+    This project focuses on designing and implementing a <strong>multidimensional data model (Star Schema)</strong> for a <strong>pharmaceutical chain</strong>.
+    The goal is to provide a foundation for sales analysis, customer pattern recognition, and managerial decision-making.
+  </p>
+
+  <div class="box-info">
+    <strong>Project Objectives:</strong>
+    <ul>
+      <li>Design Star Schema for pharmacy sales transactions</li>
+      <li>Create Dimension Tables and Fact Table</li>
+      <li>Develop Pivot Tables for multidimensional analysis</li>
+      <li>Generate comprehensive analytical reports</li>
+      <li>Extract business insights from transaction data</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Section: Architecture -->
+<div class="section">
+  <h2>🏗️ Star Schema Architecture</h2>
+  
+  <p>
+    The Star Schema is a dimensional data model used in OLAP systems.
+    It consists of a central Fact Table and multiple Dimension Tables.
+  </p>
+
+  <div class="schema-diagram">
+    <img src="star_schema_diagram.jpg" alt="Star Schema Diagram" style="width: 100%; max-width: 900px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); margin: 20px 0;">
+  </div>
+
+  <h3>Model Components:</h3>
+
+  <table>
+    <tr>
+      <th>Table Name</th>
+      <th>Type</th>
+      <th>Records</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td><code>FACT_SALES</code></td>
+      <td>Fact Table</td>
+      <td>5,000</td>
+      <td>All pharmaceutical sales transactions</td>
+    </tr>
+    <tr>
+      <td><code>DIM_TIME</code></td>
+      <td>Dimension</td>
+      <td>366</td>
+      <td>All days of year 2024</td>
+    </tr>
+    <tr>
+      <td><code>DIM_CUSTOMER</code></td>
+      <td>Dimension</td>
+      <td>4,347</td>
+      <td>Customer demographic information</td>
+    </tr>
+    <tr>
+      <td><code>DIM_DRUG</code></td>
+      <td>Dimension</td>
+      <td>20</td>
+      <td>Drug catalog (20 types)</td>
+    </tr>
+    <tr>
+      <td><code>DIM_BRANCH</code></td>
+      <td>Dimension</td>
+      <td>10</td>
+      <td>Pharmacy branches</td>
+    </tr>
+  </table>
+
+  <div class="box-success">
+    <strong>✓ Advantages of Star Schema:</strong>
+    <ul>
+      <li>Faster queries due to fewer joins</li>
+      <li>Easier understanding of data structure</li>
+      <li>Optimized for analytical (OLAP) queries</li>
+      <li>High scalability for adding new dimensions</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Section: Dimension Tables -->
+<div class="section">
+  <h2>📋 Dimension Tables</h2>
+
+  <h3>1) Time Dimension (DIM_TIME)</h3>
+  <div class="box-info">
+    <p><strong>Covers:</strong> Date, Day, Month, Quarter, Year, DayOfWeek, WeekOfYear</p>
+    <p><strong>Purpose:</strong> Temporal analysis of sales (daily, monthly, quarterly)</p>
+  </div>
+
+  <h3>2) Customer Dimension (DIM_CUSTOMER)</h3>
+  <div class="box-info">
+    <p><strong>Covers:</strong> CustomerID, Gender, AgeGroup</p>
+    <p><strong>Age Groups:</strong> &lt;18, 18-35, 36-50, 51-65, &gt;65</p>
+    <p><strong>Purpose:</strong> Customer segmentation and behavior analysis</p>
+  </div>
+
+  <h3>3) Drug Dimension (DIM_DRUG)</h3>
+  <div class="box-info">
+    <p><strong>Covers:</strong> DrugCode, DrugName, Category</p>
+    <p><strong>Categories:</strong> 13 pharmaceutical drug categories</p>
+    <p><strong>Purpose:</strong> Sales analysis by drugs and categories</p>
+  </div>
+
+  <h3>4) Branch Dimension (DIM_BRANCH)</h3>
+  <div class="box-info">
+    <p><strong>Covers:</strong> BranchCode, BranchName</p>
+    <p><strong>Count:</strong> 10 branches (B001 to B010)</p>
+    <p><strong>Purpose:</strong> Revenue comparison across pharmacy units</p>
+  </div>
+</div>
+
+<!-- Section: Fact Table -->
+<div class="section">
+  <h2>📊 Fact Table (FACT_SALES)</h2>
+
+  <p>
+    The Fact Table contains all sales transactions. Each row represents a purchase.
+  </p>
+
+  <h3>Measure Columns:</h3>
+  <table>
+    <tr>
+      <th>Column</th>
+      <th>Data Type</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td><code>Quantity</code></td>
+      <td>Integer</td>
+      <td>Units of drugs sold (1-4)</td>
+    </tr>
+    <tr>
+      <td><code>UnitPrice</code></td>
+      <td>Decimal</td>
+      <td>Price per unit (Iranian Rials)</td>
+    </tr>
+    <tr>
+      <td><code>TotalAmount</code></td>
+      <td>Decimal</td>
+      <td>Total transaction amount</td>
+    </tr>
+    <tr>
+      <td><code>PaymentMethod</code></td>
+      <td>String</td>
+      <td>Cash, Card, Insurance, Check</td>
+    </tr>
+  </table>
+
+  <h3>Overall Statistics:</h3>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="label">Total Revenue</div>
+      <div class="value">1.67B</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Total Transactions</div>
+      <div class="value">5,000</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Avg Transaction</div>
+      <div class="value">334K</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Units Sold</div>
+      <div class="value">12,530</div>
+    </div>
+  </div>
+</div>
+
+<!-- Section: Pivot Tables -->
+<div class="section">
+  <h2>🔄 Pivot Tables (7 Analysis Tables)</h2>
+
+  <p>Pivot tables enable multidimensional analysis across different dimensions:</p>
+
+  <ol>
+    <li><strong>Monthly Revenue Trend</strong> - Revenue by month</li>
+    <li><strong>Branch vs Drug Category</strong> - Sales per branch by category</li>
+    <li><strong>Age Group vs Gender</strong> - Customer demographic patterns</li>
+    <li><strong>Payment Method by Branch</strong> - Payment preference analysis</li>
+    <li><strong>Day of Week Analysis</strong> - Daily sales patterns</li>
+    <li><strong>Top 10 Drugs</strong> - Best-selling pharmaceutical products</li>
+    <li><strong>Age Distribution</strong> - Customer age group analysis</li>
+  </ol>
+</div>
+
+<!-- Section: Business Insights -->
+<div class="section">
+  <h2>💡 Business Insights & Recommendations</h2>
+
+  <h3>Key Findings:</h3>
+
+  <div class="box-info">
+    <strong>1. Revenue Distribution by Branch:</strong>
+    <ul>
+      <li>Branch 5 generates 26% of total revenue (186 Billion)</li>
+      <li>Branch 10 generates only 8.8% of total revenue (148 Billion)</li>
+      <li>Recommendation: Investigate Branch 10 efficiency</li>
+    </ul>
+  </div>
+
+  <div class="box-info">
+    <strong>2. Customer Behavior Patterns:</strong>
+    <ul>
+      <li>Age group 36-50 is the largest purchaser (344 Billion)</li>
+      <li>Gender distribution nearly equal (50%-50%)</li>
+      <li>Recommendation: Target marketing campaigns for 36-50 age group</li>
+    </ul>
+  </div>
+
+  <div class="box-info">
+    <strong>3. Payment Method Preferences:</strong>
+    <ul>
+      <li>Cash: 40% (647 Billion)</li>
+      <li>Card: 35% (593 Billion)</li>
+      <li>Insurance: 20% (349 Billion)</li>
+      <li>Check: 5% (83 Billion)</li>
+      <li>Recommendation: Promote digital payment methods</li>
+    </ul>
+  </div>
+
+  <div class="box-info">
+    <strong>4. Best-Selling Drugs:</strong>
+    <ul>
+      <li>Antibiotic (D0005): 182 Billion (Highest)</li>
+      <li>Anticonvulsant (D0013): 129 Billion</li>
+      <li>Statin (D0010): 126 Billion</li>
+      <li>Recommendation: Ensure adequate inventory for top drugs</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Section: Conclusion -->
+<div class="section">
+  <h2>🎓 Conclusion</h2>
+
+  <p>
+    This project demonstrates how Star Schema enables comprehensive analysis of pharmaceutical sales data.
+    By designing proper data structure and creating multiple pivot tables, organizations can:
+  </p>
+
+  <ul>
+    <li>💰 Gain deeper understanding of revenue sources</li>
+    <li>📊 Analyze sales patterns across different dimensions</li>
+    <li>👥 Examine customer behavior by demographics</li>
+    <li>📈 Make data-driven managerial decisions</li>
+    <li>🎯 Execute targeted marketing campaigns</li>
+  </ul>
+
+  <div class="highlight">
+    <strong>Key Takeaway:</strong>
+    Star Schema models are powerful tools for analysis and reporting in business systems.
+    They provide clear data structure, fast queries, and flexible pivot tables.
+  </div>
+</div>
+
+</div>
+
+<div class="footer">
+  <div style="margin-bottom: 20px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+    <p style="margin: 8px 0; font-size: 1rem;">
+      <strong>Author:</strong> Abolfazl Omidiyan
+    </p>
+    <p style="margin: 8px 0; font-size: 0.95rem;">
+      Master's Student in Information Technology - Organizational Architecture
+    </p>
+    <p style="margin: 12px 0; font-size: 0.95rem;">
+      <a href="https://ir.linkedin.com/in/abolfazl-omidiyan" target="_blank">
+        🔗 LinkedIn Profile - Abolfazl Omidiyan
+      </a>
+    </p>
+  </div>
+  <p>© Project 2 - Pharmaceutical Chain Star Schema</p>
+  <p>All Rights Reserved | 2024</p>
+</div>
+
+</body>
+</html>

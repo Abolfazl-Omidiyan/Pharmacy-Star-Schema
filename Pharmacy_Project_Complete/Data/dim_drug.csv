@@ -1,0 +1,21 @@
+DrugCode,DrugName,Category
+D0013,Gabapentin,Anticonvulsant
+D0016,Metoprolol,Beta Blocker
+D0001,Paracetamol,Analgesic
+D0004,Cetirizine,Antihistamine
+D0008,Omeprazole,Proton Pump Inhibitor
+D0010,Atorvastatin,Statin
+D0020,Citalopram,SSRI
+D0019,Albuterol,Bronchodilator
+D0005,Azithromycin,Antibiotic
+D0007,Amlodipine,Antihypertensive
+D0002,Ibuprofen,Analgesic
+D0015,Hydrochlorothiazide,Diuretic
+D0018,Prednisone,Corticosteroid
+D0006,Metformin,Antidiabetic
+D0014,Sertraline,SSRI
+D0009,Lisinopril,Antihypertensive
+D0017,Pantoprazole,Proton Pump Inhibitor
+D0011,Simvastatin,Statin
+D0012,Losartan,Antihypertensive
+D0003,Amoxicillin,Antibiotic
